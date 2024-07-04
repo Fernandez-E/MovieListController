@@ -28,3 +28,7 @@ def get_unwatched(cursor):
     movies = cursor.execute(f'SELECT * FROM movie WHERE status = 0')
     movies = cursor.fetchall()
     return(movies)
+
+def set_watched(con, cursor, IMDB):
+    cursor.execute(f'UPDATE movie SET Status = 1 WHERE IMDB = {IMDB}')
+    con.commit()
