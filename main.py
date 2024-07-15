@@ -1,4 +1,6 @@
 from functions import database as db
+from functions import search
+
 import pandas as pd
 from random import randint
 import os
@@ -9,8 +11,8 @@ movies = pd.read_excel('excel/IMDB.xlsx')
 
 #conecta ao banco de dados
 database = db.connect()
-con = database[0]
-cursor = database[1]
+con = database[0] #retorna a conexão
+cursor = database[1] # retorna o cursor para execução de requisições
 db.create_table(cursor)
 
 #inserir se banco estiver vazio
@@ -93,7 +95,7 @@ while option != 0:
     
     #marcar filme como assistido
     elif option == 5:
-        confirm = 0
+        confirm, movie_found, option = 0, 0, 0
         os.system('cls')
         unwatched = db.get_unwatched(cursor)
         for movie in unwatched:
@@ -102,6 +104,26 @@ while option != 0:
     
         #TODO: Tratar erro de selecao (filme que esta na lista geral pode ser selecionado)
         while confirm != 1:
+            print('')
+            print('1 - Pesquisar filme')
+            print('2 - Registrar filme por IMDB')
+            print('0 - Voltar')
+            option = int(input('>>> ')) 
+            
+            if option == 1:
+                while movie_found != 1:
+                    print('')
+                    print('Digite parte do titulo do filme assistido para pesquisar')
+                    title = input('>>> ')
+                    print('')
+                    search.search_movie(title)
+                    print('')
+                    print('Encontrou o filme?')
+                    print('1 - Sim / 2 - Nao')
+                    movie_found = int(input('>>> '))
+            elif option == 0:
+                break
+            
             print('')
             print('Qual a posicao IMDB do filme assistido?')
             imdb = int(input('>>> '))
